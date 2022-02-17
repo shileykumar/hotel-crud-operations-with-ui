@@ -23,9 +23,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="btn btn-primary" th:href="@{/hotels/create}">Add Hotel</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -33,9 +30,9 @@
 
 
 <div class="container p-5">
-    <h5>Order By</h5>
     <div class="row">
         <div class="p-2 col-sm-6">
+            <a class="btn btn-primary" th:href="@{/hotels/create}">Add Hotel</a>
             <!--<table>
                 <tr>
                     <td><a th:href="@{/api/}" class="btn">Default</a></td>
@@ -48,7 +45,7 @@
             <form th:action="@{/_search/hotels}" method="get">
                 <table>
                     <tr>
-                        <td><input type="text" name="searchText" th:value="${searchText}"  placeholder="search" class="form-control"></td>
+                        <td><input type="text" name="searchText" th:value="${searchText}"  placeholder="search" class="form-control" required></td>
                         <td>
                             <button type="submit" class="btn btn-info" >Search</button>
                         </td>

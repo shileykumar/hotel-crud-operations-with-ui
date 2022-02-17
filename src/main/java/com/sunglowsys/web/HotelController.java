@@ -7,10 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
@@ -28,21 +29,23 @@ public class HotelController {
     public ModelAndView home() {
         log.debug("Web request to get Hotels");
         Page<Hotel> page = hotelService.findAll(PageRequest.of(0,20));
-        List<Hotel> hotels = page.getContent();
-        return new ModelAndView("index", "hotels", hotels);
+        return new ModelAndView("index", "hotels", page.getContent());
     }
 
     @GetMapping("/hotels/create")
-    public ModelAndView createHotelForm(@ModelAttribute Hotel hotel) {
+    public ModelAndView createHotelForm() {
         log.debug("Web request to lod create Hotel form");
-        return new ModelAndView("add-hotel","hotel", hotel);
+        return new ModelAndView("add-hotel","hotel", new Hotel());
     }
 
-    @PostMapping("/hotels")
-    public ModelAndView createHotel(@ModelAttribute Hotel hotel) {
+    @PostMapping("/hotels/create")
+    public ModelAndView createHotel(@ModelAttribute @Valid Hotel hotel, BindingResult result) {
         log.debug("Web request to create Hotel : {}", hotel);
+        if (result.hasErrors()) {
+            return new ModelAndView("add-hotel");
+        }
         hotelService.save(hotel);
-        return new ModelAndView("redirect:/","hotel",hotel);
+        return new ModelAndView("redirect:/");
     }
 
     @GetMapping("/hotels/update/{id}")
@@ -53,10 +56,9 @@ public class HotelController {
     }
 
     @GetMapping("/_search/hotels")
-    public ModelAndView searchHotel(String searchText) {
+    public ModelAndView searchHotel(@RequestParam String searchText) {
         log.debug("Web request to search Hotel : {}", searchText);
-        List<Hotel>  hotels = hotelService.search(searchText);
-        return new ModelAndView("index", "hotels", hotels);
+        return new ModelAndView("index", "hotels", hotelService.search(searchText));
     }
 
     @GetMapping("/hotels/delete/{id}")
