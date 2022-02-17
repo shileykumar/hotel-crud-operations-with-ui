@@ -52,6 +52,13 @@ public class HotelController {
         return new ModelAndView("add-hotel", "hotel", hotel);
     }
 
+    @GetMapping("/_search/hotels")
+    public ModelAndView searchHotel(String searchText) {
+        log.debug("Web request to search Hotel : {}", searchText);
+        List<Hotel>  hotels = hotelService.search(searchText);
+        return new ModelAndView("index", "hotels", hotels);
+    }
+
     @GetMapping("/hotels/delete/{id}")
     public ModelAndView deleteHotel(@PathVariable Long id) {
         log.debug("Web request to delete Hotel : {}", id);

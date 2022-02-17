@@ -50,7 +50,8 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public List<Hotel> search(String searchText) {
-        return null;
+        log.debug("Request to search Hotel : {}", searchText);
+        return hotelRepository.search(searchText);
     }
 
     @Override
