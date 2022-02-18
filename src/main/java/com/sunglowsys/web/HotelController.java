@@ -49,10 +49,9 @@ public class HotelController {
     }
 
     @GetMapping("/hotels/update/{id}")
-    public ModelAndView updateHotel(@ModelAttribute Hotel hotel, @PathVariable Long id) {
+    public ModelAndView updateHotelForm(@PathVariable Long id) {
         log.debug("Web request to update Hotel : {}", id);
-        hotel = hotelService.findById(id).get();
-        return new ModelAndView("add-hotel", "hotel", hotel);
+        return new ModelAndView("add-hotel", "hotel", hotelService.findById(id).get());
     }
 
     @GetMapping("/_search/hotels")
